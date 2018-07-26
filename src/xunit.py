@@ -28,6 +28,17 @@ class TestCase:
         self.tearDown()
         return result
 
+class TestSuite:
+    def __init__(self):
+        self.tests= []
+    def add(self, test):
+        self.tests.append(test)
+    def run(self):
+        result = TestResult()
+        for test in self.tests:
+            test.run()
+        return result
+
 class WasRun(TestCase):
     def setUp(self):
         self.log = "setUp "
@@ -56,8 +67,15 @@ class TestCaseTest(TestCase):
         result.testStarted()
         result.testFailed()
         assert("1 run, 1 failed" == result.summary())
+    def testSuite(self):
+        suite = TestSuite()
+        suite.add(WasRun("testMethod"))
+        suite.add(WasRun("testBrokenMethod"))
+        result = suite.run()
+        assert("2 run, 1 failed" == result.summary())
 
 print(TestCaseTest("TestTemplateMethod").run().summary())
 print(TestCaseTest("testResult").run().summary())
 print(TestCaseTest("testFailedResult").run().summary())
 print(TestCaseTest("testFailedResultFormatting").run().summary())
+print(TestCaseTest("testSuite").run().summary())
