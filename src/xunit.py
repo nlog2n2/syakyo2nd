@@ -36,7 +36,7 @@ class TestSuite:
     def run(self):
         result = TestResult()
         for test in self.tests:
-            test.run()
+            test.run(result)
         return result
 
 class WasRun(TestCase):
